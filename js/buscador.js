@@ -13,10 +13,9 @@
     });
 }); */
 
-function buscarDisco(e){
-    e.preventDefault();
-    $.get("https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json",
-    function(data, status){
+function buscarDisco(){
+    event.preventDefault();
+    $.ajax("discos.json").done(function(data, status){
         console.log(data);
         alert("Resultado " + data + "\n Estado: " + status);
     });
