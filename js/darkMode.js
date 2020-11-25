@@ -7,14 +7,14 @@ btnSwitch.addEventListener('click', function(e){
 })
 // Modificación fotos Historia
 //Creación de variables con un valor inicial (para saber si está el modo oscuro o no)
-var fotoMostrada = "logoDark";
-var fotoQueen = "queenColor";
-var fotoFreddie = "freddieColor";
-var fotoBrian = "brianColor";
-var fotoJohn = "johnColor";
-var fotoRoger = "rogerColor";
-var fotoQueenArg = "queenArgColor"
-var fotoMostradaFooter = "logoFooterDark"
+let fotoMostrada = "logoDark";
+let fotoQueen = "queenColor";
+let fotoFreddie = "freddieColor";
+let fotoBrian = "brianColor";
+let fotoJohn = "johnColor";
+let fotoRoger = "rogerColor";
+let fotoQueenArg = "queenArgColor"
+let fotoMostradaFooter = "logoFooterDark"
 //Se accede al buton del HTML desde el evento "onClick" nombrando a la siguiente función: 
 function funcionDarkMode(){
     //Acá define las variables con el elemento del HTML (utilizando DOM)
