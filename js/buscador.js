@@ -1,84 +1,83 @@
-//const endpoint = '../discos.json';
-/*  $("#boton__busqueda").click(function(e){
-    e.preventDefault()
-    $.ajax({
-        url: "../discos.json",
-        dataType: "json",
-        type:"get",
-        success: function(response){
-            $.each(response.titulo, function(item){
-                console.log(item.titulo);
-            });
-        }
-    });
-});  */
-/* 
-const discos = '../discos.json'
-const promesa = fetch(discos);
-const arrayDiscosVacio = [];
-fetch(discos)
-    .then(blob => blob.json())
-    .then(data => arrayDiscosVacio.push(data));
-console.log(arrayDiscosVacio);
+/* Sector HTML
+<div class="buscador">
+        <form class="form-inline my-2 my-lg-0" id="formulario">
+            <input class="form-control mr-sm-2" type="text" placeholder="Escriba un Álbum" id="buscador__discos">
+            <button class="btn btn-primary" id="boton_carritoCompras"><a href="#"><i class="fas fa-shopping-cart"></i></a></button>
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit" id="boton__busqueda">Buscar</button>                             
+        </form>
+</div>
+*/
 
-function encontrarDiscos(palabraABuscar, arrayDiscosVacio){
-    return arrayDiscosVacio.filter(album => {
-        const regex = new RegExp (palabraABuscar, 'gi');
-        return album.titulo.match(regex) || album.sello.match(regex);
-    });
+/* Sector JS
+const resultado = document.getElementsByClassName("discos");
+const formulario = document.getElementById("formulario");
+
+
+window.onload = () => {
+    formulario.addEventListener('submit', validarFormulario);
+}
+function validarFormulario(e){
+    e.preventDefault();
+    const buscador = document.querySelector("#buscador__discos").value;
+
+    if (buscador === '') {
+        mostrarAlerta("Completa el campo para continuar");
+        return;
+    }
+    
+    buscarDiscos(buscador);
 }
 
-const buscar = document.getElementById('buscador__discos');
-const sugerencias = document.querySelector('.sugerencias');
-buscar.addEventListener('change', displayMatches);
-buscar.addEventListener('keyup', displayMatches);
-function displayMatches(e){
-    const matchArray = encontrarDiscos(e.target.value, arrayDiscosVacio)
-    console.log(matchArray);
+function mostrarAlerta(mensaje){
+    //Esta variable + la condicional evita que se muestre el mensaje de error varias veces en pantalla
+    const existeAlerta = document.querySelector('.bg-red-100');
+    if(!existeAlerta){
+        const alerta = document.createElement('p');
+        //Lo siguiente son estilos agregados a la variable, en este caso, "alerta".
+        alerta.classList.add('bg-red-100', 'border-red-400', 'text-red-700', 'px-4', 'py-3', 'rounded', 'max-w-lg', 'mx-auto', 'mt-6', 'text-center', 'alert-danger');
+        alerta.innerHTML = `
+        <strong class="font-bold">Error!</strong>
+        <span class="block sm:inline">${mensaje}</span>
+        `;
+        formulario.appendChild(alerta);
+
+        setTimeout( () =>{
+            alerta.remove();
+        }, 3000)
+    }
 }
 
-document.getElementById("boton__busqueda").addEventListener('click', function(e){
-    e.preventDefault()
-}) */
-/* 
-function buscarDisco(){
-    event.preventDefault();
-    let botonBusqueda = document.getElementById("buscador__discos").value.toLowerCase();
-    let cardDisco = `
-    <div class="card" style="width: 18rem;">
-        <img loading="lazy" src="${discos.portada}" class="card-img-top" alt="Portada Álbum 'Queen II'">
-        <div class="card-body">
-            <h5 class="card-title"> ${discos.titulo}</h5>
-            <p class="card-text">Publicación: ${discos.publicacion}  || Sello: ${discos.sello} </p>
-            <p class="card-price"> ${discos.precio}</p>
-            <a href="https://open.spotify.com/album/0NouBnbXRJKFWzm9LwCW0K" class="btn btn-primary" target="_blank">Escuchar Álbum</a>
-            <button class="btn btn-primary addCarrito showCarrito">Comprar Álbum</button>    
-        </div>
-    </div>
-    `
-    //cardDisco2.innerHTML = carcardDisco;
-    let discosFiltrados = discos.filter(item =>{
-        if(item.titulo.toLowerCase() == botonBusqueda){
-            cardDisco
-        }
-        return item.titulo.toLowerCase() == botonBusqueda
-    });
-    console.log(discosFiltrados);
-    let procesoFiltrado = item =>{return item.titulo == botonBusqueda}
-    let discosFiltro = discos.filter(procesoFiltrado)
-    //console.log(discosFiltro); 
-}  */
-/*  function buscarDisco(){
-    event.preventDefault();
-    let botonBusqueda = document.getElementById("buscador__discos").value;
-    let discosFiltrados = discos.filter( function(disco){
-        if(disco != botonBusqueda.value ){
-            discos.hide();
-        }else{
-            discos.show();
-        }
-    });
-    console.log(discosFiltrados);
-}  */
+function buscarDiscos() {
+    const url = '../discos.json';
+    fetch(url)
+        .then(respuesta => respuesta.json())
+        .then(resultado => {
+            mostrarPortadas(resultado);
+        })
+}
 
+function mostrarPortadas(portadas){
+    console.log(portadas)
+    //Remueve el elemento anteriormente creado
+    while(resultado.firstChild){
+        resultado.removeChild(resultado.firstChild);
+    }   
+
+    //Itera sobre el array de discos y construye el HTML
+    portadas.forEach( imagen => {
+        const { titulo, publicacion, precio, portada, sello} = imagen;
+        resultado.innerHTML += `
+        <img loading="lazy" src="${imagen.portada}" class="card-img-top" alt="Portada Álbum 'Queen'">
+                  <div class="card-body">
+                      <h5 class="card-title">${titulo}</h5>
+                      <p class="card-text">Publicación: ${publicacion} || Sello: ${sello}</p>
+                      <p class="card-price">$${precio}</p>
+                      <a href="https://open.spotify.com/album/1kkb8xlG9yssEVsWKiEtAB" target="_blank" class="btn btn-primary">Escuchar Álbum</a>
+                      <button class="btn btn-primary addCarrito showCarrito">Comprar Álbum</button>
+                  </div>
+        `
+    })
+}
+
+*/
 //No logré que funcione el buscador :(
